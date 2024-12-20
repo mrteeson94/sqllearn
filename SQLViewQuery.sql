@@ -108,3 +108,75 @@ EXEC spModify_PractitionerMobile
 	@num = '0412345678';
 */
 SELECT * FROM Practitioner
+
+--7.	Manipulate the Practitioner table to store a driver’s licence number. For privacy and security purposes this data needs to be encrypted. Name the new column DriversLicenceHash. For encrypting the column, use a one-way hashing algorithm. Execute the statement to create the new column.
+--Add the drivers licence number of 1066AD Dr Ludo Vergenargen’s (Practitioner ID 10005) drivers licence using a SHA hashing function.
+--Display Dr Vertenargen’s record to view the hashed number.
+ /*
+ALTER TABLE Practitioner
+ADD DriversLicenceHash VARBINARY(64);
+
+
+ALTER PROCEDURE spEncrypt_PracDriverLicence 
+	@id INT,
+	@driver NVARCHAR(64)
+AS
+BEGIN
+	UPDATE Practitioner
+	SET DriversLicenceHash = HASHBYTES('SHA2_512', @driver)
+	WHERE Practitioner_ID =	@id
+END;
+*/
+EXEC spEncrypt_PracDriverLicence
+	@id= 6,
+	@Driver= '1066AD';
+
+SELECT * FROM Practitioner
+WHERE Practitioner_ID = 6;
+
+
+UPDATE Practitioner
+SET DriversLicenceHash = HASHBYTES('SHA2_512', '2055AD')
+WHERE Practitioner_ID =	5;
+
+--8.	Manipulate the Patient table to add a new column that will store a date value which is the last date they made contact. The default value should be the date of record creation. Name the new column LastContactDate. 
+-- Execute the statement to create the new column.
+/*
+ALTER TABLE Patient
+ADD LastContactDate DATE;
+
+SELECT * FROM Patient
+
+UPDATE Patient
+SET LastContactDate = (
+	SELECT MAX(Appointment.ApptDate)
+	FROM Appointment
+	WHERE Appointment.Patient_Ref = Patient.Patient_ID
+);
+*/
+
+-- 9.	Create a trigger on the Appointment table that will update LastContactDate on the Patient table each time a new record is added to the Appointment table. 
+-- The value of the LastContactDate should be the date the record is added. Name the trigger tr_Appointment_AfterInsert.
+CREATE OR ALTER TRIGGER trg_Appointment_AfterInsert
+ON Appointment
+AFTER INSERT
+AS
+BEGIN
+	UPDATE Patient
+	SET LastContactDate = GETDATE()
+	FROM Patient pt
+	JOIN inserted i ON pt.Patient_ID = i.Patient_Ref
+END;
+
+SELECT * FROM Appointment;
+
+SET IDENTITY_INSERT Appointment ON;
+INSERT INTO Appointment(Appt_ID,ApptDate,ApptStartTime,Patient_Ref,Practitioner_Ref) VALUES (21,'2024-12-24','10:00:00',77,2);
+SET IDENTITY_INSERT Appointment OFF;
+
+SELECT * FROM patient
+
+--10.	Delete the view vwNurseDays from the database.
+DROP VIEW vwNurseDays
+-- 11.	Delete the stored procedure spSelect_vwNSWPatients from the database.
+DROP PROCEDURE spSelect_vwNSWPatients

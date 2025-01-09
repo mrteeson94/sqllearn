@@ -29,17 +29,20 @@ sql
 For example, if two or more people are named 'John' in the first_name column then don't include their name in the output list. If only 1 person is named 'Leo' then include them in the output.
 * Show patient_id and first_name from patients where their first_name start and ends with 's' and is at least 6 characters long.
 * Show patient_id, first_name, last_name from patients whos diagnosis is 'Dementia'.
-
 Primary diagnosis is stored in the admissions table.
-* 
-* 
-* 
-* 
-* 
-* 
-* 
-* 
-* 
+* Display every patient's first_name. Order the list by the length of each name and then by alphabetically.
+* Show the total amount of male patients and the total amount of female patients in the patients table.
+Display the two results in the same row.
+* Show first and last name, allergies from patients which have allergies to either 'Penicillin' or 'Morphine'. Show results ordered ascending by allergies then by first_name then by last_name.
+* Show patient_id, diagnosis from admissions. Find patients admitted multiple times for the same diagnosis.
+* Show the city and the total number of patients in the city.
+Order from most to least patients and then by city name ascending.
+* Show first name, last name and role of every person that is either patient or doctor.
+The roles are either "Patient" or "Doctor"
+* Show all allergies ordered by popularity. Remove NULL values from query.
+* Show all patient's first_name, last_name, and birth_date who were born in the 1970s decade. Sort the list starting from the earliest birth_date.
+* We want to display each patient's full name in a single column. Their last_name in all upper letters must appear first, then first_name in all lower case letters. Separate the last_name and first_name with a comma. Order the list by the first_name in decending order
+EX: SMITH,jane
 
 **HARD**
 * 
